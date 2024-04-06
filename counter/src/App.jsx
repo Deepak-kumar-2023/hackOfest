@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import './App.css'
-const { ethers } = require("ethers");
+import { ethers } from "ethers";
 
-
+// import { constractRead } from './readSmartContract';
 
 
   
@@ -10,7 +10,12 @@ const { ethers } = require("ethers");
 function App() {
   // const [likes, setCount] = useState(0) 
   const [dislikes, setCount1] = useState(0) 
-  const walletAddress = "0x660B3e5F4aae325eE70D36beDF41A4F98e1C092e"; //contract wallet
+  let [num, setCount] = useState(0) 
+  let lol;
+  
+  const walletAddress = "0xCd500E89BB2FB655249b0651Ba1b30811ce6b4F0"; //contract wallet
+  const provider = new ethers.providers.JsonRpcProvider(
+    "https://sepolia.infura.io/v3/f4ba41cf8b1d49148dba75054987eced");
   useEffect(() => {
     const walletAbi = [
       {
@@ -374,15 +379,19 @@ function App() {
         "type": "function"
       }
     ]
-     // const writeContract = async () => {
-    //   const provider = new ethers.providers.Web3Provider(window.ethereum); //window.ethereum is injected by metamask
-    //   await provider.send("eth_requestAccounts", []); //request user to connect with metamask
-    //   const signer = provider.getSigner();  //get signer
-    //   const contract = new ethers.Contract(walletAddress, walletAbi, signer); //contract instance
-      
-    //   await contract.setter(); //call contract function name of function is setter to write data on blockchain
-    // };
+
+
+     const writeContract = async () => {
+      const provider = new ethers.providers.Web3Provider(window.ethereum); //window.ethereum is injected by metamask
+      await provider.send("eth_requestAccounts", []); //request user to connect with metamask
+      const signer = provider.getSigner();  //get signer
+      const contract = new ethers.Contract(walletAddress, walletAbi, signer); //contract instance
+      await contract.setProtest("a","b","c","d"); //call contract function name of function is setter to write data on blockchain
+      console.log("setter is running");
+    };
     // writeContract(); //call writeContract function
+
+
 
     const constractRead= async () => {  //function to read contract data from blockchain
       const walletContract =new ethers.Contract( //contract instance
@@ -390,16 +399,19 @@ function App() {
           walletAbi,
           provider
       )
-      // console.log(walletContract);
+      console.log("walletContract");
   
-      const Name= await walletContract.getpoints(1); //call contract function name of function is getter
-      console.log("points : ", Name.toString()); //print the result of getter function
-  
-  }
-  constractRead();
+    //   num= await walletContract.protitle(1); //call contract function name of function is getter
+    //   console.log("points : ", num.toString()); //print the result of getter function
+    //   // lol=num.toString();
+    //   // return lol;
+      
+    }
+    
+    constractRead();
+   
   }, []);
 
-  console.log("dislikes")
   return (
     <>
       <h1>learning react</h1>
@@ -408,6 +420,9 @@ function App() {
       
         <button onClick={() => setCount1( dislikes + 1)}>
           dislikes {dislikes}
+        </button>
+        <button onClick={() => setCount(num.toString())}>
+          like {(num.toString())}
         </button>
         
       </div>
